@@ -20,3 +20,8 @@ auto r{(*plain_c_pointer)('c', 32.2)};
 
 std::cout << r << std::endl; // Prints '5'
 ```
+
+## jungles::overload
+
+It is taken from the Bartłomiej Filipek's blog: 
+[Variant and Overload](https://www.bfilipek.com/2018/06/variant.html#overload)
