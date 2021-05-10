@@ -25,3 +25,11 @@ std::cout << r << std::endl; // Prints '5'
 
 It is taken from the Bartłomiej Filipek's blog: 
 [Variant and Overload](https://www.bfilipek.com/2018/06/variant.html#overload)
+
+## Algorithms 
+
+Defined in [jungles/algorithm.hpp](jungles/algorithm.hpp).
+
+### jungles::copy
+
+Is the same as `std::copy`, but the iterators may have different types, e.g. the end iterator can be a sentinel.
