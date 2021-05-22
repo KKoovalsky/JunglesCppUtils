@@ -39,8 +39,9 @@ std::vector<float> calculate_correlation_function(ItSignalBegin signal_begin,
                                                   ItPatternEnd pattern_end,
                                                   unsigned num_offsets)
 {
-    auto signal_autocorrelation_factor{correlation_product(signal_begin, signal_end, signal_begin, signal_end)};
-    auto pattern_autocorrelation_factor{correlation_product(pattern_begin, pattern_end, pattern_begin, pattern_end)};
+    auto signal_autocorrelation_factor{detail::correlation_product(signal_begin, signal_end, signal_begin, signal_end)};
+    auto pattern_autocorrelation_factor{
+        detail::correlation_product(pattern_begin, pattern_end, pattern_begin, pattern_end)};
 
     auto calculate_cross_correlation_product{[=]<typename BegIt, typename EndIt>(BegIt beg_it, EndIt end_it) {
         auto cross_correlation_product{detail::correlation_product(beg_it, end_it, pattern_begin, pattern_end)};
