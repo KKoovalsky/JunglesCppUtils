@@ -33,3 +33,8 @@ Defined in [jungles/algorithm.hpp](jungles/algorithm.hpp).
 ### jungles::copy
 
 Is the same as `std::copy`, but the iterators may have different types, e.g. the end iterator can be a sentinel.
+
+## jungles::calculate_correlation_function
+
+Calculates correlation function for `num_offsets` of the `signal`, with reference to `pattern`. Uses Pearson 
+correlation coefficient formula for each offset.
