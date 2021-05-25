@@ -38,3 +38,32 @@ Is the same as `std::copy`, but the iterators may have different types, e.g. the
 
 Calculates correlation function for `num_offsets` of the `signal`, with reference to `pattern`. Uses Pearson 
 correlation coefficient formula for each offset.
+
+## jungles::singleton
+
+CRTP utility to be used by class if one wants to indicate that the class is a Singleton - only one instance at a time
+can be running:
+
+```
+class USBDriver : public jungles::Singleton<USBDriver>
+{
+    // ...
+};
+
+{
+    USBDriver{};
+    USBDriver{}; // Will throw 
+}
+
+{
+
+    {
+        USBDriver{};
+    }
+
+    {
+        USBDriver{}; // OK
+    }
+}
+
+```

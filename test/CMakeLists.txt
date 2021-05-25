@@ -18,7 +18,7 @@ endmacro()
 
 
 macro(CreateTests)
-    add_executable(jungles_cpp_utils_tests test_callback.cpp)
+    add_executable(jungles_cpp_utils_tests test_callback.cpp test_singleton.cpp)
     target_link_libraries(jungles_cpp_utils_tests PRIVATE Catch2::Catch2WithMain jungles::cpp_utils)
     target_compile_options(jungles_cpp_utils_tests PRIVATE -Wall -Wextra)
     add_test(NAME native_helpers COMMAND valgrind --leak-check=full $<TARGET_FILE:jungles_cpp_utils_tests>)
