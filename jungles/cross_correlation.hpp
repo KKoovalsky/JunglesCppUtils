@@ -18,16 +18,23 @@ namespace detail
 {
 
 template<typename ItSignalBegin, typename ItSignalEnd, typename ItPatternBegin, typename ItPatternEnd>
-inline int correlation_product(ItSignalBegin signal_begin,
-                               ItSignalEnd signal_end,
-                               ItPatternBegin pattern_begin,
-                               ItPatternEnd pattern_end)
+inline auto correlation_product(ItSignalBegin signal_begin,
+                                ItSignalEnd signal_end,
+                                ItPatternBegin pattern_begin,
+                                ItPatternEnd pattern_end)
 {
+    using SignalUnderlyingType = typename ItSignalBegin::value_type;
+
     if (std::distance(signal_begin, signal_end) > std::distance(pattern_begin, pattern_end))
         throw std::runtime_error("Signal cannot be longer than pattern");
 
-    return std::inner_product(
-        signal_begin, signal_end, pattern_begin, static_cast<int>(0), std::plus<int>{}, std::multiplies<int>{});
+    SignalUnderlyingType result{std::inner_product(signal_begin,
+                                                   signal_end,
+                                                   pattern_begin,
+                                                   static_cast<SignalUnderlyingType>(0),
+                                                   std::plus<SignalUnderlyingType>{},
+                                                   std::multiplies<SignalUnderlyingType>{})};
+    return result;
 }
 
 } // namespace detail
