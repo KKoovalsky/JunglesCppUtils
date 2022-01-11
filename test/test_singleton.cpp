@@ -11,21 +11,26 @@
 
 using namespace jungles;
 
-class SingletonUnderTest : public Singleton<SingletonUnderTest>
+class SingletonCRTP : public Singleton<SingletonCRTP>
 {
 };
 
-TEST_CASE("Only one singleton instance can be created at a time", "[singleton]")
+struct SingletonAsMember
+{
+    Singleton<SingletonAsMember> singleton;
+};
+
+TEST_CASE("Only one CRTP singleton instance can be created at a time", "[singleton]")
 {
     SECTION("One singleton instance is alive")
     {
-        REQUIRE_NOTHROW(SingletonUnderTest{});
+        REQUIRE_NOTHROW(SingletonCRTP{});
     }
 
     SECTION("Second singleton can't be created")
     {
-        SingletonUnderTest s{};
-        REQUIRE_THROWS(SingletonUnderTest{});
+        SingletonCRTP s{};
+        REQUIRE_THROWS(SingletonCRTP{});
     }
 
     SECTION("Two different singleton types can be used at a time")
@@ -44,7 +49,43 @@ TEST_CASE("Only one singleton instance can be created at a time", "[singleton]")
 
     SECTION("Two instances can be alive but in non overlapping time")
     {
-        SingletonUnderTest{};
-        REQUIRE_NOTHROW(SingletonUnderTest{});
+        SingletonCRTP{};
+        REQUIRE_NOTHROW(SingletonCRTP{});
+    }
+}
+
+TEST_CASE("Only one singleton as member instance can be created at a time", "[singleton]")
+{
+    SECTION("One singleton instance is alive")
+    {
+        REQUIRE_NOTHROW(SingletonAsMember{});
+    }
+
+    SECTION("Second singleton can't be created")
+    {
+        SingletonAsMember s{};
+        REQUIRE_THROWS(SingletonAsMember{});
+    }
+
+    SECTION("Two different singleton types can be used at a time")
+    {
+        struct OneTypeWithSingletonMember
+        {
+            Singleton<OneTypeWithSingletonMember> singleton_indicator;
+        };
+
+        struct SecondTypeWithSingletonMember
+        {
+            Singleton<SecondTypeWithSingletonMember> singleton_indicator;
+        };
+
+        OneTypeWithSingletonMember one;
+        REQUIRE_NOTHROW(SecondTypeWithSingletonMember{});
+    }
+
+    SECTION("Two instances can be alive but in non overlapping time")
+    {
+        SingletonAsMember{};
+        REQUIRE_NOTHROW(SingletonAsMember{});
     }
 }
