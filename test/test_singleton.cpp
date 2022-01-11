@@ -5,6 +5,7 @@
  */
 #include <catch2/catch_test_macros.hpp>
 
+#include <exception>
 #include <functional>
 
 #include "jungles/singleton.hpp"
@@ -87,5 +88,38 @@ TEST_CASE("Only one singleton as member instance can be created at a time", "[si
     {
         SingletonAsMember{};
         REQUIRE_NOTHROW(SingletonAsMember{});
+    }
+}
+
+TEST_CASE("Exception type is applied to throwing singleton", "[singleton]")
+{
+    SECTION("When used with CRTP")
+    {
+        struct SingletonCRTPError : std::exception
+        {
+        };
+
+        struct SingletonCRTPWithCustomExceptionType :
+            Singleton<SingletonCRTPWithCustomExceptionType, SingletonCRTPError>
+        {
+        };
+
+        SingletonCRTPWithCustomExceptionType s{};
+        REQUIRE_THROWS_AS(SingletonCRTPWithCustomExceptionType{}, SingletonCRTPError);
+    }
+
+    SECTION("When used as member")
+    {
+        struct SingletonAsMemberError : std::exception
+        {
+        };
+
+        struct SingletonAsMemberWithCustomExceptionType
+        {
+            Singleton<SingletonAsMemberWithCustomExceptionType, SingletonAsMemberError> singleton_indicator;
+        };
+
+        SingletonAsMemberWithCustomExceptionType s{};
+        REQUIRE_THROWS_AS(SingletonAsMemberWithCustomExceptionType{}, SingletonAsMemberError);
     }
 }

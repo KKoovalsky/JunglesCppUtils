@@ -6,19 +6,20 @@
 #ifndef SINGLETON_HPP
 #define SINGLETON_HPP
 
+#include <exception>
 #include <stdexcept>
 
 namespace jungles
 {
 
-template<typename T>
+template<typename T, typename Exception = std::exception>
 class Singleton
 {
   public:
     Singleton()
     {
         if (is_instance_created)
-            throw std::runtime_error{"One instance already created"};
+            throw Exception{};
 
         is_instance_created = true;
     }
